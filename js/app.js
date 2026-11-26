@@ -84,8 +84,8 @@
   function welcomeView() {
     return '<div class="welcome"><div class="logo" aria-hidden="true">🏡</div><h1>JFam</h1>' +
       '<p>Chores turn into quests, quests turn into pocket money, and the whole family\'s week sits in one place.</p>' +
-      '<div class="card"><h3>Connect to your family Sheet</h3><ol class="steps"><li>Open HQ on this phone or iPad.</li><li>Go to Settings, then Connect Google Sheet.</li><li>Tap Open JFam. You land back here, connected.</li></ol>' +
-      '<p class="small" style="margin:14px 0 4px">Or paste the address and secret code from HQ:</p>' +
+      '<div class="card"><h3>Connect to your family Sheet</h3><ol class="steps"><li>Open HQ and tap Sync. It shows your Apps Script address and secret code.</li><li>Copy each one and paste it below.</li><li>Tap Connect. Your family is already waiting in the Sheet.</li></ol>' +
+      '<p class="small" style="margin:14px 0 4px">A connect link from Worship or another JFam phone works in the address box too.</p>' +
       '<input type="url" id="cu" placeholder="Apps Script address (https://script.google.com/...)" autocomplete="off" autocapitalize="off" spellcheck="false" style="margin-bottom:8px">' +
       '<input type="text" id="ct" placeholder="Secret code" autocomplete="off" autocapitalize="off" spellcheck="false" style="margin-bottom:12px">' +
       '<button class="btn wide" data-a="connect">Connect</button></div>' +
@@ -581,6 +581,11 @@
     var off = U.$('[data-x="off"]', v); if (off) off.onclick = function () { if (confirm('Disconnect this device from your Sheet? Your family data stays safe in the Sheet.')) { U.closeSheet(); ST.disconnect(); } };
   }
   function doConnect(u, t) {
+    var lk = /[#&]connect=([^&\s]+)/.exec(u || '');
+    if (lk) {
+      try { var j = JSON.parse(atob(decodeURIComponent(lk[1]))); u = j.url || ''; t = j.token || ''; }
+      catch (e) { U.toast('That connect link is damaged. Paste the address and code from HQ instead.', true); return; }
+    }
     if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(u)) { U.toast('That does not look like an Apps Script address. It starts with https://script.google.com/', true); return; }
     if (!t) { U.toast('Type the secret code too.', true); return; }
     U.closeSheet(); ST.setConn(u, t); ST.syncNow().then(function () { if (ST.sync.state === 'ok') U.toast('Connected to your Sheet'); });

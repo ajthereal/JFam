@@ -68,8 +68,8 @@
     try {
       var j = JSON.parse(atob(decodeURIComponent(m[1])));
       if (j && /^https:\/\//.test(j.url || '') && j.token) { ST.setConn(j.url, j.token, true); return 'ok'; }
-      return 'That connect link is incomplete. Open Family > Settings and paste the address and code instead.';
-    } catch (e) { return 'That connect link is damaged. Open Family > Settings and paste the address and code instead.'; }
+      return 'That connect link is incomplete. Paste the address and code from HQ instead.';
+    } catch (e) { return 'That connect link is damaged. Paste the address and code from HQ instead.'; }
   };
   ST.setConn = function (url, token, quiet) {
     url = String(url || '').trim(); token = String(token || '').trim();

@@ -1,4 +1,4 @@
-const V='jfam-v2';
+const V='jfam-v3';
 const SHELL=['./','index.html','manifest.webmanifest','css/app.css','js/core.js','js/seed.js','js/ui.js','js/store.js','js/app.js','icons/icon-192.png','icons/apple-touch-icon.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.all(SHELL.map(u=>c.add(u).catch(()=>{})))));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))));self.clients.claim()});
